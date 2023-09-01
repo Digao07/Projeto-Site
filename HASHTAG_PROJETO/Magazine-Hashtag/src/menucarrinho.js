@@ -1,5 +1,7 @@
 import { catalogo } from "./utilidades";
 
+const idProdutoCarrinhoComQuantidade = {}
+
 function abrirCarrinho() {
   document.getElementById("carrinho").classList.add("right-[0px]");
   document.getElementById("carrinho").classList.remove("right-[-360px]");
@@ -18,12 +20,47 @@ export function inicializarCarrinho() {
   botaoAbrirCarrinho.addEventListener("click", abrirCarrinho);
 }
 
-export function adicionarAoCarrinho(idProdutos) {
+function removerDoCarrinho(idProdutos) {
+  delete idProdutoCarrinhoComQuantidade[idProdutos];
+  renderizarProdutosCarrinho();
+}
+
+function incrementarQuantidadeProduto(idProdutos) {
+  idProdutoCarrinhoComQuantidade[idProdutos]++;
+  atualizarInformacaoQuantidade(idProdutos);
+}
+
+function decrementarQuantidadeProduto(idProdutos) {
+    if(idProdutoCarrinhoComQuantidade[idProdutos] === 1){
+      removerDoCarrinho(idProdutos);
+      return;
+    }
+    idProdutoCarrinhoComQuantidade[idProdutos]--;
+    atualizarInformacaoQuantidade(idProdutos);
+}
+
+function atualizarInformacaoQuantidade(idProdutos) {
+  document.getElementById(`quantidade-${idProdutos}`).innerText = idProdutoCarrinhoComQuantidade[idProdutos];
+}
+
+function desenhaProdutoNoCarrinho(idProdutos) {
   const produto = catalogo.find((p) => p.id === idProdutos);
   const containerProdutosCarrinho =
     document.getElementById("produtos-carrinho");
-  const cartaoProdutoCarrinho = `<article class="flex bg-slate-100 rounded-lg p-1 relative">
-    <button id="fechar-carrinho" class="absolute top-0 right-2">
+
+  const elementoArticle = document.createElement("article");
+  const articleClasses = [
+    "flex",
+    "bg-slate-100",
+    "rounded-lg", 
+    "relative",
+  ];
+
+  for (const articleClass of articleClasses) {
+    elementoArticle.classList.add(articleClass);
+  }
+
+  const cartaoProdutoCarrinho = `<button id="remover-item-${produto.id}" class="absolute top-0 right-2">
       <i 
         class="fa-solid fa-circle-xmark text-slate-500 hover:text-slate-800"
       ></i>
@@ -33,11 +70,49 @@ export function adicionarAoCarrinho(idProdutos) {
       alt="Carrinho: ${produto.nome}"
       class="h-24 rounded-lg"
     />
-   <div class="py-2">
+   <div class="p-2 flex flex-col justify-between">
      <p class="text-slate-900 text-sm">${produto.nome}</p>
      <p class="text-slate-400 text-xs">Tamanho: M</p>
      <p class="text-green-700 text-lg">$${produto.preco}</p>
    </div>
- </article>`;
-  containerProdutosCarrinho.innerHTML += cartaoProdutoCarrinho;
+   <div class="flex text-slate-950 items-end absolute bottom-0 right-2 text-lg">
+    <button id="decrementar-produto-${produto.id}">-</button>
+    <p id="quantidade-${produto.id}" class="ml-2">${idProdutoCarrinhoComQuantidade[produto.id]}</p>
+    <button class="ml-2" id="incrementar-produto-${produto.id}">+</button>
+   </div>`;
+
+  elementoArticle.innerHTML = cartaoProdutoCarrinho;
+  containerProdutosCarrinho.appendChild(elementoArticle);
+  
+  document
+  .getElementById(`decrementar-produto-${produto.id}`)
+  .addEventListener("click", () => decrementarQuantidadeProduto(produto.id));
+
+  document
+  .getElementById(`incrementar-produto-${produto.id}`)
+  .addEventListener("click", () => incrementarQuantidadeProduto(produto.id));
+
+  document
+  .getElementById(`remover-item-${produto.id}`)
+  .addEventListener("click", () => removerDoCarrinho(produto.id));
+}
+
+function renderizarProdutosCarrinho() {
+  const containerProdutosCarrinho =
+  document.getElementById("produtos-carrinho");
+  containerProdutosCarrinho.innerHTML = "";
+
+  for (const idProdutos in idProdutoCarrinhoComQuantidade) {
+    desenhaProdutoNoCarrinho(idProdutos);
+  }
+}
+
+export function adicionarAoCarrinho(idProdutos) {
+    if (idProdutos in idProdutoCarrinhoComQuantidade){
+      incrementarQuantidadeProduto(idProdutos);
+      return;
+    }
+  idProdutoCarrinhoComQuantidade[idProdutos] = 1;
+  desenhaProdutoNoCarrinho(idProdutos);
+  
 }
