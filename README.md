@@ -29,7 +29,7 @@ Projeto de um E-commerce com as seguintes funcionalidades:
 ## 🔖 Layout
 
 <p align="center">
-<img src="https://github.com/bruno130187/hashtagJavascriptMagazine/blob/main/imagem-para-readme.png" />
+<img src="https://github.com/Digao07/Projeto-Site/blob/main/HASHTAG_PROJETO/imagem-para-readme.png" />
 </p> 
 
 # Para rodar o projeto no seu computador basta instalar o Node.js e, após isso, abrir a pasta do projeto com o VSCode e executar o seguinte comando no terminal:
