@@ -17,14 +17,7 @@ Esse projeto foi desenvolvido com as seguintes tecnologias:
 
 ## 💻 Projeto  
 
-Projeto de um E-commerce com as seguintes funcionalidades:
--Cadastro de Cliente.
--Login.
--Solicitação de exames.
--Gerenciar solicitação de Exames.
--Acesso medico.
--Gerenciar Cliente.
--Alterar dados dos exames.
+Projeto de um E-commerce 
 
 ## 🔖 Layout
 
