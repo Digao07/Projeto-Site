@@ -11,7 +11,6 @@
 
 Esse projeto foi desenvolvido com as seguintes tecnologias:  
 
-- Python
 - Javascript
 - HTML e CSS
 
